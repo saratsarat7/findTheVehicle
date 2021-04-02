@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "419046745533",
+    "project_id": "findthevehicle",
+    "storage_bucket": "findthevehicle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419046745533:android:c1048a4cb70a559700ded4",
+        "android_client_info": {
+          "package_name": "com.deluded.find_the_vehicle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419046745533-gtmlv85u3m111rean2nj68kib5tk10jt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3Wii5XIXelkv0BM7j7-8kVvlPkh07gaM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419046745533-gtmlv85u3m111rean2nj68kib5tk10jt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
