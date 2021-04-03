@@ -77,14 +77,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 image: FileImage(_userImageFile),
                               ),
                             )
-                          : GestureDetector(
-                              onTap: () {
-                                _pickImage(ImageSource.camera);
-                              },
-                              child: Center(
-                                child: Text("Number Plate"),
-                              ),
-                            ),
+                          : SizedBox.expand(
+                          child: TextButton(
+                            child: Text("Scan Image"),
+                            onPressed: () {
+                              _pickImage(ImageSource.camera);
+                            },
+                          )
+                      ),
                     ),
                   ),
                 ),
@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   icon: Icon(Icons.image_search),
                   label: Text(
-                    'Get Details',
+                    'Get Data',
                   ),
                 ),
                 Padding(
