@@ -21,6 +21,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String string = "Find Vehicle Owner Details";
   File _userImageFile;
+  File _captchaImageFile;
+  String _captchaValue = "";
   var result = "";
 
   ImagePicker picker = ImagePicker();
@@ -49,15 +51,20 @@ class _HomeScreenState extends State<HomeScreen> {
         // });
       }
     }
-    String simpleText = result.replaceAll(new RegExp(r"\s+"), "");
-    int indexNum = simpleText.indexOf(new RegExp(r'AP[0-9]+[a-zA-Z]'));
-    print(simpleText);
-    print(indexNum);
-    var mySearch = simpleText.substring(indexNum, indexNum+10);
-    print(mySearch);
+    // String simpleText = result.replaceAll(new RegExp(r"\s+"), "");
+    // int indexNum = simpleText.indexOf(new RegExp(r'AP[0-9]+[a-zA-Z]'));
+    // print(simpleText);
+    // print(indexNum);
+    // var mySearch = simpleText.substring(indexNum, indexNum + 10);
+    // print(mySearch);
+    var mySearch = 'AP31BJ2394';
     result = '"' + mySearch + '"';
-    String vehicleDetails = await getVehicleInfo(result);
-    // String vehicleDetails = "Testing";
+    List responseData = await getVehicleInfo(result);
+    String vehicleDetails = responseData[0];
+    String captchaPath = responseData[1];
+    setState(() {
+      _captchaImageFile = File(captchaPath);
+    });
     setState(() {
       result = vehicleDetails;
     });
@@ -75,36 +82,64 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Center(
             child: Column(
               children: <Widget>[
+                SizedBox( height: 10 ),
                 Padding(
-                  padding: const EdgeInsets.all(18.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
                       color: Colors.orangeAccent.withOpacity(0.3),
                       width: MediaQuery.of(context).size.width,
-                      height: 400,
-                      child: _userImageFile != null
-                          ? GestureDetector(
-                              onTap: () {
-                                _pickImage(ImageSource.camera);
-                              },
-                              child: Image(
-                                image: FileImage(_userImageFile),
-                              ),
-                            )
-                          : SizedBox.expand(
-                              child: TextButton(
-                              child: Text("Scan Image"),
-                              onPressed: () {
-                                _pickImage(ImageSource.camera);
-                              },
-                            )),
+                      height: 100,
+                      child: SizedBox.expand(
+                        child: TextButton(
+                          child: Text("Scan Image"),
+                          onPressed: () {
+                            _pickImage(ImageSource.camera);
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 10,
+                SizedBox( height: 10 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: _userImageFile != null
+                      ? Container(
+                          color: Colors.orangeAccent.withOpacity(0.3),
+                          width: MediaQuery.of(context).size.width,
+                          height: 100,
+                          child: _captchaImageFile != null
+                              ? Image(
+                                  image: FileImage(_captchaImageFile),
+                                )
+                              : SizedBox.expand(
+                                  child: Center(
+                                    child: Text("Trying to get data automatically"),
+                                  ),
+                                ),
+                        )
+                      : SizedBox(
+                          height: 0,
+                        ),
                 ),
+                SizedBox( height: 10 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: _captchaImageFile != null
+                      ? TextField(
+                          onChanged: (value) => _captchaValue = value,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Enter above captcha here',
+                          ),
+                        )
+                      : SizedBox(
+                          height: 0,
+                        ),
+                ),
+                SizedBox( height: 10 ),
                 TextButton.icon(
                   onPressed: () {
                     recogniseText();
@@ -115,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Padding(
-                    padding: const EdgeInsets.all(10.0), child: Text(result)),
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0), child: Text(result)),
               ],
             ),
           ),

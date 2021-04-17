@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 var jsonResp = "";
 
-Future<String> getVehicleInfo(String vehicleNumber) async {
+Future<List> getVehicleInfo(String vehicleNumber) async {
   var passed = false;
   String captchaPath = "";
   String captchaId = "";
@@ -21,7 +21,11 @@ Future<String> getVehicleInfo(String vehicleNumber) async {
       counter++;
     }
   } while (passed == false && counter <= 10);
-  return jsonResp;
+  if (passed == true) {
+    return [jsonResp, ""];
+  } else {
+    return [jsonResp, captchaPath];
+  }
 }
 
 Future<List> getCaptchaDetails () async {
@@ -44,7 +48,7 @@ Future<String> decodeImage (String encodedImageString) async {
 
   String captchaPath = '/storage/emulated/0/Android/data/com.deluded.find_the_vehicle/files/captchaImage.png';
   var file = File(captchaPath);
-  // file.delete();
+  // await file.delete();
   file.writeAsBytesSync(decodedBytes);
 
   return captchaPath;
