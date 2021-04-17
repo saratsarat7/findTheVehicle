@@ -18,7 +18,7 @@ Future<String> getVehicleInfo(String vehicleNumber) async {
       solvedCaptcha = '"' + solvedCaptcha + '"';
       passed = await queryWithCaptcha(vehicleNumber, captchaId, solvedCaptcha);
     }
-  } while (passed);
+  } while (passed == false);
   return jsonResp;
 }
 
@@ -73,14 +73,16 @@ Future<bool> queryWithCaptcha (prNo, captchaId, captchaValue) async {
   if (statusCode == 200) {
     var jsonResponse = convert.jsonDecode(response.body);
     print(jsonResponse);
-    if (jsonResponse["status"] = true) {
+    if (jsonResponse["status"] == true) {
       jsonResp = jsonResponse["result"].toString();
-      return false;
-    } else {
       return true;
+    } else {
+      print('Failed !! Retrying....');
+      return false;
     }
   } else {
     print('Failed !! Response Code : $statusCode');
+    jsonResp = 'Failed !! Response Code : $statusCode';
     return true;
   }
 }
