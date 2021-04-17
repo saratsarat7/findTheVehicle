@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
 
+import 'package:find_the_vehicle/helper.dart';
+
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
@@ -46,6 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     }
+    result = '"AP31BJ2394"';
+    String vehicleDetails = await getVehicleInfo(result);
+    setState(() {
+      result = vehicleDetails;
+    });
   }
 
   @override
@@ -78,13 +85,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             )
                           : SizedBox.expand(
-                          child: TextButton(
-                            child: Text("Scan Image"),
-                            onPressed: () {
-                              _pickImage(ImageSource.camera);
-                            },
-                          )
-                      ),
+                              child: TextButton(
+                              child: Text("Scan Image"),
+                              onPressed: () {
+                                _pickImage(ImageSource.camera);
+                              },
+                            )),
                     ),
                   ),
                 ),

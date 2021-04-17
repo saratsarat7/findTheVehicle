@@ -32,6 +32,8 @@ dependencies:
   firebase_ml_vision: ^0.11.0
   image_picker: ^0.7.4
 
+  http: ^0.13.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
