@@ -43,13 +43,21 @@ class _HomeScreenState extends State<HomeScreen> {
     result = "";
     for (TextBlock block in readText.blocks) {
       for (TextLine line in block.lines) {
-        setState(() {
-          result = result + ' ' + line.text + '\n';
-        });
+        result = result + ' ' + line.text;
+        // setState(() {
+        //   result = result + ' ' + line.text;
+        // });
       }
     }
-    result = '"AP31BJ2394"';
+    String simpleText = result.replaceAll(new RegExp(r"\s+"), "");
+    int indexNum = simpleText.indexOf(new RegExp(r'AP[0-9]+[a-zA-Z]'));
+    print(simpleText);
+    print(indexNum);
+    var mySearch = simpleText.substring(indexNum, indexNum+10);
+    print(mySearch);
+    result = '"' + mySearch + '"';
     String vehicleDetails = await getVehicleInfo(result);
+    // String vehicleDetails = "Testing";
     setState(() {
       result = vehicleDetails;
     });

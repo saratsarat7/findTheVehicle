@@ -9,6 +9,7 @@ Future<String> getVehicleInfo(String vehicleNumber) async {
   var passed = false;
   String captchaPath = "";
   String captchaId = "";
+  int counter = 1;
   do {
     List values = await getCaptchaDetails();
     captchaPath = values[0];
@@ -16,9 +17,10 @@ Future<String> getVehicleInfo(String vehicleNumber) async {
     if (captchaPath != '') {
       String solvedCaptcha = await translateCaptcha(captchaPath);
       solvedCaptcha = '"' + solvedCaptcha + '"';
-      passed = await queryWithCaptcha(vehicleNumber, captchaId, solvedCaptcha);
+      passed = await queryWithCaptcha(vehicleNumber, captchaId, solvedCaptcha, counter);
+      counter++;
     }
-  } while (passed == false);
+  } while (passed == false && counter <= 10);
   return jsonResp;
 }
 
@@ -62,7 +64,7 @@ Future<String> translateCaptcha (captchaLocation) async {
   return result.replaceAll(new RegExp(r"\s+"), "");
 }
 
-Future<bool> queryWithCaptcha (prNo, captchaId, captchaValue) async {
+Future<bool> queryWithCaptcha (prNo, captchaId, captchaValue, counter) async {
   String userReq = '{"prNo":$prNo,"captchaId":$captchaId,"captchaValue":$captchaValue}';
   print(userReq);
   var dataUrl = Uri.https('rtaappsc.epragathi.org:1201', '/reg/citizenServices/applicationSearchForCitizenRequired');
@@ -77,7 +79,7 @@ Future<bool> queryWithCaptcha (prNo, captchaId, captchaValue) async {
       jsonResp = jsonResponse["result"].toString();
       return true;
     } else {
-      print('Failed !! Retrying....');
+      print('Failed $counter times !! Retrying....');
       return false;
     }
   } else {
